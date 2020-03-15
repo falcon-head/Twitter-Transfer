@@ -3,7 +3,7 @@ __foldername__ = twitter-transfer
 __filename__ = get_follower_list.py
 __author__ = Shrikrishna Joisa
 __date_created__ = 14/03/2020
-__date_last_modified__ =  14/03/2020
+__date_last_modified__ =  15/03/2020
 __python_version__ = 3.7.4 64-bit
 __credits__ = []
 
@@ -113,13 +113,18 @@ class FollowerList(scrapy.Spider):
                 for i in range(0, len(length_of_follower)):
                     item = []
                     item = TwitterTransferItem()
-                    name = twitter_driver.find_elements_by_xpath('//div//section//div[contains(@aria-label, "Timeline: Following")]//div[contains(@data-testid, "UserCell")]//a//span/span')[i]
+                    name = twitter_driver.find_elements_by_xpath('//div//section//div[contains(@aria-label, "Timeline: Following")]//div[contains(@data-testid, "UserCell")]//a//div[@dir="auto"]/span')[i]
+                    twitter_username = twitter_driver.find_elements_by_xpath('//div//section//div[contains(@aria-label, "Timeline: Following")]//div[contains(@data-testid, "UserCell")]//a//div[@dir="ltr"]/span')[i]
                     print('*********************************************', name.text)
+                    print('*********************************************', twitter_username.text)
                     name = name.text
+                    twitter_username = twitter_username.text
                     item["Name"] = name
+                    item["Username"] = twitter_username
                     yield item
             except Exception as e:
                 print(e)
+                print("No more followers found for the current scroll height")
 
             twitter_driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
             time.sleep(5)
