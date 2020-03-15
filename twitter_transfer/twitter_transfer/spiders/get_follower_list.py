@@ -101,22 +101,39 @@ class FollowerList(scrapy.Spider):
         following_list.click()
         time.sleep(5)
 
-        # Get all the username and passoword
-        try:
-            for i in range(0, 300):
-                item = []
-                item = TwitterTransferItem()
-                name = twitter_driver.find_elements_by_xpath('//div//section//div[contains(@aria-label, "Timeline: Following")]//div[contains(@data-testid, "UserCell")]//a//span/span')[i]
-                twitter_driver.execute_script('arguments[0].scrollIntoView();', name)
-                print('*********************************************', name.text)
-                name = name.text
-                item["Name"] = name
-                time.sleep(3)
-                yield item
-        except Exception as e:
-            raise e
+        # Scroll and get the data
+        last_scroll_height = twitter_driver.execute_script("return document.body.scrollHeight")
 
-        print("Hello")
+        while True:
+            # Get the total number of followers
+            length_of_follower = twitter_driver.find_elements_by_xpath('//div//section//div[contains(@aria-label, "Timeline: Following")]//div[contains(@data-testid, "UserCell")]//a//span/span')
+
+            # Get all the username and passoword
+            try:
+                for i in range(0, len(length_of_follower)):
+                    item = []
+                    item = TwitterTransferItem()
+                    name = twitter_driver.find_elements_by_xpath('//div//section//div[contains(@aria-label, "Timeline: Following")]//div[contains(@data-testid, "UserCell")]//a//span/span')[i]
+                    print('*********************************************', name.text)
+                    name = name.text
+                    item["Name"] = name
+                    yield item
+            except Exception as e:
+                print(e)
+
+            twitter_driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+            time.sleep(5)
+
+            new_scroll_height = twitter_driver.execute_script("return document.body.scrollHeight")
+
+            if new_scroll_height == last_scroll_height:
+                break
+
+            last_scroll_height = new_scroll_height
+
+        print("Exited the scrolling")
+
+
 
     def spider_closed(self, spider):
         pass
