@@ -3,7 +3,7 @@ __foldername__ = twitter-transfer
 __filename__ = get_follower_list.py
 __author__ = Shrikrishna Joisa
 __date_created__ = 16/03/2020
-__date_last_modified__ =  16/03/2020
+__date_last_modified__ =  17/03/2020
 __python_version__ = 3.7.4 64-bit
 __credits__ = []
 
@@ -66,6 +66,30 @@ class Follow(scrapy.Spider):
         twitter_driver = webdriver.Chrome(chrome_options=chrome_option)
         twitter_driver.set_script_timeout(4000000)
         twitter_driver.set_page_load_timeout(180000)
+
+        # Get the url
+        twitter_driver.get(response.url)
+        time.sleep(5)
+
+        #Find the login button and click
+        login_button = twitter_driver.find_element_by_xpath('//div//a[contains(@data-testid, "login")]')
+        twitter_driver.execute_script("arguments[0].scrollIntoView();", login_button)
+        login_button.click()
+        time.sleep(5)
+
+        #Find the username input
+        username_input = twitter_driver.find_element_by_xpath('//div//label//input[contains(@name, "session[username_or_email]")]')
+        twitter_driver.execute_script("arguments[0].scrollIntoView();", username_input)
+        username_input.send_keys(self.email)
+        time.sleep(5)
+
+        # Find the password field
+        password_input = twitter_driver.find_element_by_xpath('//div//label//input[@type="password"]')
+        twitter_driver.execute_script("arguments[0].scrollIntoView();", password_input)
+        password_input.send_keys(self.password)
+        password_input.send_keys(Keys.RETURN)
+        time.sleep(15)
+
 
     def spider_closed(self, spider):
         pass
