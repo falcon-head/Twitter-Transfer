@@ -67,28 +67,6 @@ class Follow(scrapy.Spider):
         twitter_driver.set_script_timeout(4000000)
         twitter_driver.set_page_load_timeout(180000)
 
-        # Get the url
-        twitter_driver.get(response.url)
-        time.sleep(5)
-
-        #Find the login button and click
-        login_button = twitter_driver.find_element_by_xpath('//div//a[contains(@data-testid, "login")]')
-        twitter_driver.execute_script("arguments[0].scrollIntoView();", login_button)
-        login_button.click()
-        time.sleep(5)
-
-        #Find the username input
-        username_input = twitter_driver.find_element_by_xpath('//div//label//input[contains(@name, "session[username_or_email]")]')
-        twitter_driver.execute_script("arguments[0].scrollIntoView();", username_input)
-        username_input.send_keys(self.email)
-        time.sleep(5)
-
-        # Find the password field
-        password_input = twitter_driver.find_element_by_xpath('//div//label//input[@type="password"]')
-        twitter_driver.execute_script("arguments[0].scrollIntoView();", password_input)
-        password_input.send_keys(self.password)
-        password_input.send_keys(Keys.RETURN)
-        time.sleep(15)
 
 
     def spider_closed(self, spider):
