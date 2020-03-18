@@ -27,11 +27,12 @@ from selenium.webdriver.common.keys import Keys
 from w3lib.html import remove_tags
 from twitter_transfer.items import TwitterTransferItem
 from twitter_transfer import settings
+from tqdm import tqdm
 
 
 class Follow(scrapy.Spider):
 
-    name = "get_follower_list"
+    name = "follow"
     allowed_domains = ['twitter.com']
     email = ''
     password = ''
@@ -90,6 +91,41 @@ class Follow(scrapy.Spider):
         password_input.send_keys(Keys.RETURN)
         time.sleep(15)
 
+        # Go to Search field and search for the all the item in csv or pdf
+
+        # TODO: Produce Output in CSV
+        # TODO: Convert to df
+        # TODO: Pass the each username column to the twitter search bar
+        # TODO: Find the click on the each username and follow the follow button and repeat
+
+        df = pd.read_csv('test.csv')
+        df = df.drop_duplicates()
+        follower_list = df['Username'].tolist()
+
+        for i in tqdm(follower_list, desc='Following'):
+
+            search_people = twitter_driver.find_element_by_xpath('//input[@data-testid="SearchBox_Search_Input"]')
+            twitter_driver.execute_script('arguments[0].scrollIntoView();', search_people)
+            search_people.send_keys(i)
+            time.sleep(4)
+
+            try:
+
+                # Xpath to click //div[@role="listbox"]//div[@data-testid="TypeaheadUser"]//div[@role="presentation"]
+                drop_down_list = twitter_driver.find_elements_by_xpath('//div[@role="listbox"]//div[@data-testid="TypeaheadUser"]//div[@role="presentation"]')[1]
+                twitter_driver.execute_script('arguments[0].scrollIntoView();', drop_down_list)
+                drop_down_list.click()
+                time.sleep(5)
+
+            except:
+
+                # Xpath to click //div[@role="listbox"]//div[@data-testid="TypeaheadUser"]//div[@role="presentation"]
+                drop_down_list = twitter_driver.find_element_by_xpath('//div[@role="listbox"]//div[@data-testid="TypeaheadUser"]//div[@role="presentation"]')
+                twitter_driver.execute_script('arguments[0].scrollIntoView();', drop_down_list)
+                drop_down_list.click()
+                time.sleep(5)
+
 
     def spider_closed(self, spider):
         pass
+
