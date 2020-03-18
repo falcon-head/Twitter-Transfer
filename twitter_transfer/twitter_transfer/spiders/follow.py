@@ -3,7 +3,7 @@ __foldername__ = twitter-transfer
 __filename__ = get_follower_list.py
 __author__ = Shrikrishna Joisa
 __date_created__ = 16/03/2020
-__date_last_modified__ =  17/03/2020
+__date_last_modified__ =  18/03/2020
 __python_version__ = 3.7.4 64-bit
 __credits__ = []
 
@@ -28,6 +28,7 @@ from w3lib.html import remove_tags
 from twitter_transfer.items import TwitterTransferItem
 from twitter_transfer import settings
 from tqdm import tqdm
+import logging
 
 
 class Follow(scrapy.Spider):
@@ -93,11 +94,6 @@ class Follow(scrapy.Spider):
 
         # Go to Search field and search for the all the item in csv or pdf
 
-        # TODO: Produce Output in CSV
-        # TODO: Convert to df
-        # TODO: Pass the each username column to the twitter search bar
-        # TODO: Find the click on the each username and follow the follow button and repeat
-
         df = pd.read_csv('test.csv')
         df = df.drop_duplicates()
         follower_list = df['Username'].tolist()
@@ -110,20 +106,34 @@ class Follow(scrapy.Spider):
             time.sleep(4)
 
             try:
-
                 # Xpath to click //div[@role="listbox"]//div[@data-testid="TypeaheadUser"]//div[@role="presentation"]
-                drop_down_list = twitter_driver.find_elements_by_xpath('//div[@role="listbox"]//div[@data-testid="TypeaheadUser"]//div[@role="presentation"]')[1]
+                drop_down_list = twitter_driver.find_elements_by_xpath('//div[@role="listbox"]//div[@data-testid="TypeaheadUser"]//div[@role="presentation"]')[0]
                 twitter_driver.execute_script('arguments[0].scrollIntoView();', drop_down_list)
                 drop_down_list.click()
                 time.sleep(5)
 
-            except:
+                try:
+                    follow = twitter_driver.find_element_by_xpath('//div[@data-testid="placementTracking"]//div[contains(@data-testid, "-follow")]')
+                    follow.click()
+                    time.sleep(2)
+                except:
+                    logging.debug("You are already following %s", i)
 
+            except:
                 # Xpath to click //div[@role="listbox"]//div[@data-testid="TypeaheadUser"]//div[@role="presentation"]
                 drop_down_list = twitter_driver.find_element_by_xpath('//div[@role="listbox"]//div[@data-testid="TypeaheadUser"]//div[@role="presentation"]')
                 twitter_driver.execute_script('arguments[0].scrollIntoView();', drop_down_list)
                 drop_down_list.click()
                 time.sleep(5)
+
+                try:
+                    follow = twitter_driver.find_element_by_xpath('//div[@data-testid="placementTracking"]//div[contains(@data-testid, "-follow")]')
+                    follow.click()
+                    time.sleep(2)
+                except:
+                    logging.debug("You are already following %s", i)
+
+        print("Process complete. Kindly check your account")
 
 
     def spider_closed(self, spider):
