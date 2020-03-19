@@ -24,5 +24,5 @@ C:\[path]\twitter_transfer\twitter_transfer>scrapy crawl get_follower_list -a em
 ```
 After getting the ouput in `csv` file run `follow.py` to follow the users in the users list
 ```windows path
-C:\[path]\twitter_transfer\twitter_transfer>scrapy crawl follow -a email="twitter_email" -a password="twitter_pass" -a file='output.csv'
+C:\[path]\twitter_transfer\twitter_transfer>scrapy crawl follow -a email="twitter_email" -a password="twitter_pass" -a csv="output.csv"
 ```
