@@ -18,12 +18,11 @@ C:\[path]\twitter_transfer\twitter_transfer>python setup.py
 4. Download [ChromeDriver](https://chromedriver.chromium.org/downloads "Chrome Driver") extract the .exe file and place it inside `C:\[Python path]\Scripts`
 
 ### Usage
-Generate the twitter accounts following list by running the following command
+Run `get_follower_list.py` to get the following users username.
 ```windows path
 C:\[path]\twitter_transfer\twitter_transfer>scrapy crawl get_follower_list -a email="twitter_email" -a password="twitter_pass" -o output.csv
 ```
-
-Follow the users from the generated list using the following command
+After getting the ouput in `csv` file run `follow.py` to follow the users in the users list
 ```windows path
 C:\[path]\twitter_transfer\twitter_transfer>scrapy crawl follow -a email="twitter_email" -a password="twitter_pass" -a file='output.csv'
 ```
