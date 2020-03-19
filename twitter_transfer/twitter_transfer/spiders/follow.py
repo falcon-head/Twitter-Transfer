@@ -1,9 +1,9 @@
 """
 __foldername__ = twitter-transfer
-__filename__ = get_follower_list.py
+__filename__ = follow.py
 __author__ = Shrikrishna Joisa
 __date_created__ = 16/03/2020
-__date_last_modified__ =  18/03/2020
+__date_last_modified__ =  19/03/2020
 __python_version__ = 3.7.4 64-bit
 __credits__ = []
 
