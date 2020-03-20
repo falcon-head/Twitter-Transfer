@@ -37,6 +37,7 @@ class Follow(scrapy.Spider):
     allowed_domains = ['twitter.com']
     email = ''
     password = ''
+    csv = ''
 
     def __init__(self, email = '', password= '', **kwargs):
         """Notify when the spider is closed
@@ -48,6 +49,7 @@ class Follow(scrapy.Spider):
         #* Assign the values
         self.email = email
         self.password = password
+        self.csv = csv
 
         dispatcher.connect(self.spider_closed, signals.spider_closed)
 
@@ -94,7 +96,7 @@ class Follow(scrapy.Spider):
 
         # Go to Search field and search for the all the item in csv or pdf
 
-        df = pd.read_csv('test.csv')
+        df = pd.read_csv(self.csv)
         df = df.drop_duplicates()
         follower_list = df['Username'].tolist()
 
