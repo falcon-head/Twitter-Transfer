@@ -18,7 +18,7 @@ C:\[path]\twitter_transfer\twitter_transfer>python setup.py
 4. Download [ChromeDriver](https://chromedriver.chromium.org/downloads "Chrome Driver") extract the .exe file and place it inside `C:\[Python path]\Scripts`
 
 ### Usage
-Run `get_follower_list.py` to get the following users username.
+Run `get_follower_list.py` to get your 'Following' users
 ```windows path
 C:\[path]\twitter_transfer\twitter_transfer>scrapy crawl get_follower_list -a email="twitter_email" -a password="twitter_pass" -o output.csv
 ```
